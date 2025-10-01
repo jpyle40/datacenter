@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Editor: {{ floor.name }}</h1>
+<div id="canvas"
+     style="position:relative; width:{{ floor.width_px }}px; height:{{ floor.height_px }}px;
+            border:1px solid #aaa; background:#f9f9f9;">
+  {% for b in boxes %}
+  <div class="box" data-id="{{ b.id }}"
+       style="position:absolute; left:{{ b.x }}px; top:{{ b.y }}px;
+              width:{{ b.w }}px; height:{{ b.h }}px;
+              background:{{ b.color }}; border:1px solid #444;
+              cursor:move; display:flex; align-items:center; justify-content:center;">
+    <span>{{ b.name }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+function getCookie(name){let m=document.cookie.match('(^|;)\\s*'+name+'=\\s*([^;]+)');return m?m.pop():'';}
+const CSRF = getCookie('csrftoken');
+let dragBox=null, offsetX=0, offsetY=0;
+
+document.querySelectorAll('.box').forEach(box=>{
+  box.addEventListener('mousedown', e=>{
+    dragBox=box; offsetX=e.offsetX; offsetY=e.offsetY;
+  });
+});
+
+window.addEventListener('mouseup', async e=>{
+  if(dragBox){
+    const id=dragBox.dataset.id;
+    const x=parseInt(dragBox.style.left), y=parseInt(dragBox.style.top);
+    await fetch(`/admin/box/${id}/move/`, {
+      method:'POST',
+      headers:{"Content-Type":"application/json","X-CSRFToken":CSRF},
+      body:JSON.stringify({x,y})
+    });
+  }
+  dragBox=null;
+});
+
+window.addEventListener('mousemove', e=>{
+  if(dragBox){
+    const canvas=document.getElementById('canvas');
+    dragBox.style.left=(e.pageX - offsetX - canvas.offsetLeft)+'px';
+    dragBox.style.top=(e.pageY - offsetY - canvas.offsetTop)+'px';
+  }
+});
+</script>
+{% endblock %}

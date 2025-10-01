@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}DataCenter{% endblock %}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    header { margin-bottom: 20px; }
+    a { color: blue; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>DataCenter Viewer</h2>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

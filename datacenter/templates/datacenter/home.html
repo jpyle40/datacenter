@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome</h1>
+<p>Please choose a view:</p>
+<div style="display:flex; gap:20px;">
+  {% for f in floors %}
+    <a href="{% url 'floor-viewer' f.id %}"
+       style="padding:20px; border:1px solid #444; background:#eee; text-decoration:none;">
+       {{ f.name }}
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ floor.name }} Layout</h1>
+
+<div style="position:relative; width:{{ floor.width_px }}px; height:{{ floor.height_px }}px; border:1px solid #aaa;">
+  {% for b in boxes %}
+    {% if b.rack %}
+      <!-- NEW: clickable rack -->
+      <a href="{% url 'rack-viewer' b.rack.id %}"
+         style="position:absolute; left:{{ b.x }}px; top:{{ b.y }}px;
+                width:{{ b.w }}px; height:{{ b.h }}px; background:{{ b.color }};
+                border:1px solid #444; display:flex; align-items:center; justify-content:center;">
+        {{ b.name }}
+      </a>
+    {% else %}
+      <div style="position:absolute; left:{{ b.x }}px; top:{{ b.y }}px;
+                  width:{{ b.w }}px; height:{{ b.h }}px; background:{{ b.color }};
+                  border:1px solid #444; display:flex; align-items:center; justify-content:center;">
+        {{ b.name }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}
+
