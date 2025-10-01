@@ -60,6 +60,21 @@ class RackEquipment(models.Model):
 
     class Meta:
         ordering = ["-u_start"]  # draw top-down
+        
+class EquipmentDetail(models.Model):
+    # NEW: each RackEquipment can have one EquipmentDetail
+    equipment = models.OneToOneField(
+        RackEquipment, on_delete=models.CASCADE, related_name="details"
+    )
+
+    support_contract_supplier = models.CharField(max_length=200, blank=True)
+    contract_end_date = models.DateField(null=True, blank=True)
+    folder_location_details = models.CharField(max_length=500, blank=True)   # e.g. path/URL
+    folder_location_pictures = models.CharField(max_length=500, blank=True)  # e.g. path/URL
+
+    def __str__(self):
+        return f"Details for {self.equipment.name}"
+
 
 
 

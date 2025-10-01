@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 import json
-from .models import Floor, Box, Rack
+from .models import Floor, Box, Rack, RackEquipment
 
 
 def home(request):
@@ -30,11 +30,11 @@ def rack_viewer(request, rack_id):
     equipment_list = []
     for eq in rack.equipment.all():
         equipment_list.append({
+            "id": eq.id,  # NEW: add primary key
             "name": eq.name,
             "category": eq.category,
             "u_start": eq.u_start,
             "u_end": eq.u_end,
-            # pre-calc values instead of doing math in template
             "row_start": rack.total_units - eq.u_end + 1,
             "row_span": eq.u_end - eq.u_start + 1,
         })
@@ -43,6 +43,7 @@ def rack_viewer(request, rack_id):
         "rack": rack,
         "equipment_list": equipment_list,
     })
+
 
 
 
@@ -56,6 +57,14 @@ def box_move(request, pk):
         return JsonResponse({"ok": True})
     except Exception as e:
         return HttpResponseBadRequest(str(e))
+    
+# NEW: equipment detail viewer
+def equipment_detail(request, equipment_id):
+    equipment = get_object_or_404(
+        RackEquipment.objects.select_related("details"), pk=equipment_id
+    )
+    return render(request, "datacenter/equipment_detail.html", {"equipment": equipment})
+
 
 
 

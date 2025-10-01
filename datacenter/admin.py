@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Floor, Box, Rack, RackEquipment
+from .models import Floor, Box, Rack, RackEquipment, EquipmentDetail
 
 
 @admin.register(Floor)
@@ -34,4 +34,9 @@ class RackEquipmentAdmin(admin.ModelAdmin):
     list_display = ("name", "rack", "category", "u_start", "u_end")
     list_filter = ("category", "rack")
     search_fields = ("name",)
+    
+@admin.register(EquipmentDetail)
+class EquipmentDetailAdmin(admin.ModelAdmin):
+    list_display = ("equipment", "support_contract_supplier", "contract_end_date")
+    search_fields = ("equipment__name", "support_contract_supplier")
 

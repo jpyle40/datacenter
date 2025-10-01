@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Equipment Details: {{ equipment.name }}</h1>
+
+<p><strong>Category:</strong> {{ equipment.category }}</p>
+<p><strong>Rack:</strong> {{ equipment.rack.name }}</p>
+<p><strong>Rack Units:</strong> U{{ equipment.u_start }}–U{{ equipment.u_end }}</p>
+
+{% if equipment.details %}
+  <p><strong>Support Contract Supplier:</strong> {{ equipment.details.support_contract_supplier }}</p>
+  <p><strong>Contract End Date:</strong> {{ equipment.details.contract_end_date }}</p>
+  <p><strong>Folder Location (Details):</strong> {{ equipment.details.folder_location_details }}</p>
+  <p><strong>Folder Location (Pictures):</strong> {{ equipment.details.folder_location_pictures }}</p>
+{% else %}
+  <p><em>No additional details available.</em></p>
+{% endif %}
+
+<a href="{% url 'rack-viewer' equipment.rack.id %}">Back to Rack</a>
+{% endblock %}
